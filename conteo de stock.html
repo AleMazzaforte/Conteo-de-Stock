@@ -1,0 +1,6741 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de stock</title>
+    <style>
+        body {
+            text-align: center;
+        }
+        header {
+            background-color: lightblue;
+        }
+        main {
+            background-color: aqua;
+            height: 50px;
+            padding-top: 20px;
+        }
+        form {
+            background-color: black;
+            color: aliceblue;
+            font-size: 1.7rem;
+        }
+        .selectMarca, .selectRubro {
+            font-size: 1rem;
+        }
+        #resultado {
+            width: 200px;
+            margin: 0 auto;
+        }
+        #selectGeneralMarca {
+            width: 100px;
+            height: 30px;
+        }
+        #contenedor {
+            width: 350px;
+            margin: 0 auto;
+        }
+        #campoParaMostrar {
+            text-align: left;
+            width: 350px;
+            margin: 0 auto;
+        }
+        .selectRubro {
+            display: none;
+        }
+        #divProducto {
+            background-color: white;
+            width: 280px;
+            height: 30px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="contenedor">
+        <header>
+            <h1>Femex/Blow Ink</h1>
+            <h2>Control de stock</h2>
+            
+        </header>
+        <main style="font-size: 1.7rem;">
+            <label >Marca
+                <select id="selectGeneralMarca" onchange="select1()">
+                    
+                    <ul>
+                        <option id="marca1" class="selectMarca" value="Gneiss">Gneiss</option>
+                        <option id="marca2" class="selectMarca" value="Blow Ink">Blow Ink</option>
+                        <option id="marca3" class="selectMarca" value="Next One">Next One</option>
+                        <option id="marca4" class="selectMarca" value="Global">Global</option>
+                        <option id="marca5" class="selectMarca" value="Office">Office</option>
+                        <option id="marca6" class="selectMarca" value="Art Jet">Art Jet</option>
+                        <option id="marca7" class="selectMarca" value="Otra">Otra</option>
+                    </ul>
+                </select>
+            </label>
+            
+        </main>
+        <form id="formulario1">
+<!-- <select rubro -->
+            <div id="selectGneiss">
+                <label>Rubro
+                    <select id="selectRubro1" onchange="selecionarRubro()">
+                            
+                        <ul>
+                            <option id="cartuchos" class="selectRubro" value="Cartuchos">Cartuchos</option>
+                            <option id="toners" class="selectRubro" value="Toners">Toners</option>
+                            <option id="tintas" class="selectRubro" value="Tintas">Tintas</option>
+                            <option id="papeles" class="selectRubro" value="Papeles">Papeles</option>
+                            <option id="chips" class="selectRubro" value="Chips">Chips</option>
+                            <option id="cilindros" class="selectRubro" value="Cilindros">Cilindros</option>
+                            <option id="unidadDeImagen" class="selectRubro" value="Unidad de Imagen">Unidad de Imagen</option>
+                            <option id="polvos" class="selectRubro" value="Polvos">Polvos</option>
+                            <option id="cintas" class="selectRubro" value="Cintas fiscales">Cintas fiscales</option>
+                            <option id="resmas" class="selectRubro" value="Resmas">Resmas</option>
+                            <option id="perifericos" class="selectRubro" value="Perifericos">Periféricos</option>
+
+                        </ul>
+                    </select> <br>
+                 </label>
+                
+            </div>
+
+
+            <!-- Campos input y botones -->
+            <label>Producto
+                <div  style="color: black;"><select id="divProducto"></select></div><br>
+            <label>Unidades</label>
+            <input type="number" placeholder="Unidades" id="unidades"><br>
+
+            <label>Cajas</label>
+            <input type="number" placeholder="Cajas" id="cajas"><br>
+            <input type="button" value="Calcular" onclick="calcular()">
+            <fieldset id="resultado">
+                <legend>Total</legend>
+            </fieldset>
+            <input type="button" value="Guardar" id="botonGuardar" onclick="guardar()">
+            <input type="button" value="Calculadora" id="botonCalculadora">
+        </form>
+    </div>
+    <input type="button" value="Mostrar" id="mostrar" onclick = "mostrar()">
+    <div id="campoParaMostrar"></div>
+    
+
+    <!-- Acá empieza el script  articulos.toner   -->
+    <script>
+       let articulos =[
+ {
+  "articulo": "05A-80A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "11A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "12A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "13A-15A-24A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "17A sin chip",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "17A con chip",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "26A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "26X",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "30A sin chip",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "30A con chip",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "37A ",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "42A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "48A sin chip",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "48A con chip",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "49A-53A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "51A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "55A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "58A sin chip",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "55A con chip",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "64A-90A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "78A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "79A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "81A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "83A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "85A-35A-36A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "87A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "89A S\/C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "103A ",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "105A sin chip",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "105A con chip",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "136A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "124A N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "124A C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "124A A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "124A M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "215A N sin chip (2310)",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "215A C sin chip (2311)",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "215A M sin chip (2313)",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "215A A sin chip (2312)",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "310A-350A N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "311A-351A C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "312A-352A A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "313A-353A M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "320A-540A N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "321A-541A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "322A-542A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "323A-543A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CE410A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CE411A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CE412A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CE413A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CF410A N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CF411A C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CF412A A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CF413A M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CF510A N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CF511A C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CF512A A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CF513A M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "2020 N S\/C (414A N)",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "2020 C S\/C (414A C)",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "2020 M S\/C (414A M)",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "2020 A S\/C (414S A)",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "TONER SAMSUNG",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 101,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 103,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 104,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 105,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 108,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 109,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "111S ",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "111L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 115,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 116,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "203L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 205,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "209L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 305,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "404 N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "404 C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "404 M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "404 A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "406 N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "406 C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "406 M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "406 A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "407 N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "407 C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "407 M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "407 A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "504 N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "504 C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "504 M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "504 A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "506 N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "506 C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "506 M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "506 A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 1610,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 1710,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 2850,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "TONER PANTUM",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PB 211",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PB 219",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "TONER BROTHER",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "221 N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "225 C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "225 M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "225 A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "315 N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "315 C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "315 M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "315 A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "319 N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "319 C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "319 M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "319 A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 350,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 360,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "410-450",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "580-650",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "660-2370",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 750,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "880-3479",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 1060,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "UNIDAD DE IMAGEN",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "DR14A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Unidad de Imagen",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "DR19A con chip",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Unidad de Imagen",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "DR32A con chip",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Unidad de Imagen",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "DR350",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Unidad de Imagen",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "DR360",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Unidad de Imagen",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "DR420",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Unidad de Imagen",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "DR 520 \/ 620",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Unidad de Imagen",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "DR630-2340",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Unidad de Imagen",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "DR720",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Unidad de Imagen",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "DR880-3460",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Unidad de Imagen",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "DR1060",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Unidad de Imagen",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "TONER XEROX",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "3020-3025",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "3140-3155-3160",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 3250,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "TONER LEXMARK",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "MS 310",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "MX 310",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "317-417",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "MX317",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 644,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 650,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 810,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "TONER RICOH",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "SP 301",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "SP 310",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "SP 377 ",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "SP 3710",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Toners",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "POLVOS",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "HP x 1kg",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "HP C x 1kg ",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "HP C x 500gr",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "HP C N x 250gr",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "HP C C x 250gr",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "HP C M x 250gr",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "HP C A x 250gr",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "Brother x 1kg",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "Brother C x 500gr",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "Brother C N x 250gr",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "Brother C C x 250gr",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "Brother C M x 250gr",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "Brother C A x 250gr",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "Samsung x 1kg",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "Samsung C x 1kg",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "Samsung C x 500gr",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "Samsung C N x 250gr",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "Samsung C C x 250gr",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "Samsung C M x 250gr",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "Samsung C A x 250gr",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "26A x 1kg",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "30A x 1kg",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "12A x 1kg",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "Ricoh x 1Kg",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "Lexmark x 1Kg",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "Lexmark Samsung x 1Kg",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "POLVOS",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CARTUCHOS EPSON",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 46,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "47 Cyan",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "47 Magenta",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "47 Amarillo",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "63 Negro",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "63 Cyan",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "63 Magenta",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "63 Amarillo",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "73 Negro",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "73 Cyan",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "73 Magenta",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "73 Amarillo",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 90,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "103 Negro",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "103 Cyan",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "103 Magenta",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "103 Amarillo",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "115-1",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 117,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "133 Negro",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "133 Cyan",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "133 Magenta",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "133 Amarillo",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 135,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 136,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "140 Negro",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "140 Cyan",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "140 Magenta",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "140 Amarillo",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "195-197 Negro",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "195-196 Cyan",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "195-196 Magenta",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "195-196 Amarillo",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "206 Negro",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "206 Cyan ",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "206 Magenta",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "206 Amarillo",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "297 Negro",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "296 Cyan",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "296 Magenta",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "296 Amarillo",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CARTUCHO HP",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "15XL",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "17 XL",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "21 XL",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "22 XL ",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "23 XL",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "27 XL",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "28 XL",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "45 XL",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "46 XL N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "46 XL C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "56 XL",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "57 XL",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "60 XL N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "60 XL C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "74 XL",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "75 XL",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "92 XL",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "93 XL",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "94 XL",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "95 XL",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "96 XL",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "97 XL",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "98 XL ",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "122 XL N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "122 XL C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "564 XL N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "564 XL C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "564 XL M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "564 XL A ",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "662 XL N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "662 XL C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "664 XL N new",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "664 XL C new",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "667 XL N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "667 XL C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "670 XL N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "670 XL C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "670 XL M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "670 XL A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "675 XL N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "675 XL C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "711 XL N ",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "711 XL C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "711 XL M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "711 XL A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "901 XL N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "901 XL C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "920 XL N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "920 XL C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "920 XL M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "920 XL A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "932 XL N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "933 XL C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "933 XL M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "933 XL A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "934 XL N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "935 XL C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "935 XL M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "935 XL A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "940 XL N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "940 XL C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "940 XL M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "940 XL A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "950 XL N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "951 XL C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "951 XL M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "951 XL A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "954 XL N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "954 XL C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "954 XL M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "954 XL A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cartuchos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CINTAS FISCALES",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "ERC 30-34-38 Negra",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cintas Fiscales",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "ERC 30-34-38 Púrpura",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cintas Fiscales",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "ERC 31 Negra",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cintas Fiscales",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PR4 Negra",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cintas Fiscales",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "FX890 Negra",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cintas Fiscales",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "FX2190 Negra",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cintas Fiscales",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "LX 350",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cintas Fiscales",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "SP 200",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cintas Fiscales",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "ROLLO FISCALES",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PAPEL TERMICO 57mm",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cintas Fiscales",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PAPEL TERMICO 80mm",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cintas Fiscales",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CHIP",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "19A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "30A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "48A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "79A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "85A-35A-36A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 101,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "105A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "111S viejo chip",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "111 new chip",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "310A-540A N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "311A-541A C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "312A-542A A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "313A-543A M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "404 N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "404 C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "404 M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "404 A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "406 N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "406 C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "406 M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "406 A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CF 410 N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CF 411 C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CF 412 A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CF 413 M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CE 410 N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CE 411 C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CE 412 A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CE 413 M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "504 N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "504 C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "504 M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "504 A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "506 N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "506 C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "506 M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "506 A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CF 510 N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CF 511 C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CF 512 A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CF 513 M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": 3020,
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "DR14A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "DR19A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Chips",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOTELLAS DE TINTA BLOW",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "Tintas  - EPSON",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "EP504 - N pigm 130ml ",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "EP544 - NEGRO 70ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "EP504 - EP544 CIAN 70ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "EP504 - EP544 MAG 70ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "EP504 - EP544 AM 70ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "EP664 - NEGRO 1L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "EP664 - CIAN 1 L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "EP664 - MAG 1L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "EP664 - AM 1L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "EP664 - NEGRO 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "EP664 - CIAN 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "EP664 - MAG 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "EP664 - AM 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "EP673 - L CIAN 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "EP673 - L MAG 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "Tintas - HP",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "GT51 - N PIGM 90ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "GT52 - CIAN 70ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "GT52 - MAG 70ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "GT52 - AM 70ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "Tintas - CANON",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "GI190 - N PIG 135ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "GI190 - CIAN 70ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "GI190 - MAG 70ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "GI190 - AM 70ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOTELLAS DE TINTA ART JET",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT N 1L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT C 1L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT M 1L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT A 1L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT LC 1L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT LM 1L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT N 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT C 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT M 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT A 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT LC 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT LM 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT N 150ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT C 150ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT M 150ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT A 150ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT S N 1L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT S C 1L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT S M 1L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT S A 1L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT S LC 1L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT S LM 1L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT S N 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT S C 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT S M 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT S A 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT S LC 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT S LM 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT S N 150ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT S C 150ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT S M 150ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT S A 150ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT GT N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT GT C",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT GT M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT GT A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT ET N 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT ET C 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT ET M 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT ET A 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT ET LC 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT ET LM 100mL",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT ET N 70ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT ET C 70mL",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT ET M 70ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT ET A 70mL",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT P N 1L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT P C 1L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT P M 1L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT P A 1L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT P LC 1L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT P LM 1L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT P N 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT P C 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT P M 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT P A 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT P LC 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT P LM 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT Pi 1L",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "SACH Pi 500ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT Pi 150ml\/127ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT Pi 100ml EPSON",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT Pi 100ml CANON",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT Pi C 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT Pi M 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT Pi A 100ml",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT UP N 140ML",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT UP C 140ML",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT UP M 140ML",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "BOT UP A 140ML",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CAPKEY",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "RO S 21cm",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Tintas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PAPELES",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CANVAS LANA",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CANVAS NORTEÑO",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PF A 115GR A4 x 20",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PF A 115GR A4 x 100",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PF 120GR A4",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PF 120GR A4 DF",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PF 140GR A4",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PF 160GR A4",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PF 180GR A4",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PF 200GR A4",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PF 200GR A4 X 100",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PF 230GR A4",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PF 240GR A4 DF",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PF 10x15",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PF 13x18",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PF 200GR A3",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PS A4 TRI CAPA",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PF M 640GR A4",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "P RC LUS GLOS 260GR",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "P RC LUSTER 260GR M",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PS A4",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PS A3 100GR",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PF 200GR A3+",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PF 240GR A3 DF",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PF A 115GR A3",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PS A3+",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PAPELES MATELINA",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PM A 108GR",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PM 110GR A4",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PM 130GR A4",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PM 150GR A4",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PM 170GR A4",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PM 180gr A4 SF",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PM 185gr A4 LINO N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PM 200gr A4 SF",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PM ENCAPADO 220GR",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PM 230GR A4 SF",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PM 230GR A4 CUERINA",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PM 230GR A4 ALGODÓN",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PF 250GR A4 DF",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PF 250GR A4 CANVAS",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "FILMILOS",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "P AD S CRISTAL A4",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "TRANS ACETATO\/B CLARA",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "AD N TRASLUCIDA",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PT R CLARA A4",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PT R OSCURA 4A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "HOLOFAN CONFETI",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "HOLOFAN N ESTRELLADA",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "HOLOFAN DEST BRILLANTE",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "NATUCRAF MOKKA",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "NATUCRAF LATTE",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Papeles",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "RESMAS",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "RB 90GR",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Resmas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "RB 80GR",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Resmas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "RB 75GR",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Resmas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "RB 70GR",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Resmas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "RP 70GR",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Resmas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "RP 75GR",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Resmas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "RP 70GR OF",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Resmas",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CILINDROS",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "C 108 \/ 1610",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cilindros",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "C 19A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cilindros",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "C DR420",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cilindros",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "C 101",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cilindros",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "C 104",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cilindros",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "C 12A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cilindros",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "C 26A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cilindros",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "C 05A-80A",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Cilindros",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PERIFERICOS",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "MOUSE MIG 117",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Perifericos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "MOUSE MOG 200",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Perifericos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "TECLADO KBG 204",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Perifericos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "TECLADO CBG 012",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Perifericos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "USB DATA NM-C82",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Perifericos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "USB DATA NM-C99",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Perifericos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "A IPHONE NM-C64",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Perifericos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PEN DRIVE PS 32GB N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Perifericos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PEN DRIVE PS 64GB N",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Perifericos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "PILAS AAA x 2",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Perifericos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "COOLER 80X80X25",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Perifericos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "CAMARAS ROTATIVAS",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Perifericos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "FUNDA 10' CIRCULO",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Perifericos",
+  "Cantidad Contada": 0
+ },
+ {
+  "articulo": "FUNDA 10' CRUZ",
+  "Gneiss": 0,
+  "Blow Ink": 0,
+  "Office": 0,
+  "Next One": 0,
+  "Art Jet": 0,
+  "Global": 0,
+  "Otra": 0,
+  "Rubro": "Perifericos",
+  "Cantidad Contada": 0
+ }
+]
+
+// aca empieza el codigo
+// Tomo el valor de la marca
+let marca = ""
+function select1() {
+const select = document.getElementById("selectGeneralMarca");
+const opciones = select.options;
+ marca = opciones[select.selectedIndex].value;
+
+// declaro las variables de las marcas
+ const cartuchos = document.getElementById("cartuchos");
+ const toners = document.getElementById("toners");
+ const tintas = document.getElementById("tintas");
+ const unidadDeImagen = document.getElementById("unidadDeImagen");
+ const chips = document.getElementById("chips");
+ const cintas = document.getElementById("cintas");
+ const resmas = document.getElementById("resmas");
+ const polvos = document.getElementById("polvos");
+ const perifericos = document.getElementById("perifericos");
+ const papeles = document.getElementById("papeles");
+ const cilindros = document.getElementById("cilindros");
+
+
+if (marca == "Gneiss"){
+    cartuchos.style.display = "block";
+    toners.style.display = "block";
+    tintas.style.display = "block";
+    unidadDeImagen.style.display = "block";
+    chips.style.display = "none";
+    cintas.style.display = "none";
+    resmas.style.display = "none";
+    polvos.style.display = "none";
+    perifericos.style.display = "none";
+    papeles.style.display = "none";
+    cilindros.style.display = "none";
+
+}
+else if (marca == "Blow Ink"){
+    cartuchos.style.display = "block";
+    toners.style.display = "block";
+    tintas.style.display = "block";
+    unidadDeImagen.style.display = "block";
+    chips.style.display = "none";
+    cintas.style.display = "none";
+    resmas.style.display = "none";
+    polvos.style.display = "block";
+    perifericos.style.display = "none";
+    papeles.style.display = "none";
+    cilindros.style.display = "none";
+}
+else if (marca == "Art Jet"){
+    cartuchos.style.display = "none";
+    toners.style.display = "none";
+    tintas.style.display = "block";
+    unidadDeImagen.style.display = "none";
+    chips.style.display = "none";
+    cintas.style.display = "none";
+    resmas.style.display = "none";
+    polvos.style.display = "none";
+    perifericos.style.display = "none";
+    papeles.style.display = "block";
+    cilindros.style.display = "none";
+}
+else if (marca == "Next One"){
+    cartuchos.style.display = "block";
+    toners.style.display = "block";
+    tintas.style.display = "none";
+    unidadDeImagen.style.display = "block";
+    chips.style.display = "block";
+    cintas.style.display = "none";
+    resmas.style.display = "none";
+    polvos.style.display = "none";
+    perifericos.style.display = "none";
+    papeles.style.display = "none";
+    cilindros.style.display = "block";
+}
+else if (marca == "Office"){
+    cartuchos.style.display = "block";
+    toners.style.display = "block";
+    tintas.style.display = "none";
+    unidadDeImagen.style.display = "block";
+    chips.style.display = "none";
+    cintas.style.display = "none";
+    resmas.style.display = "none";
+    polvos.style.display = "none";
+    perifericos.style.display = "none";
+    papeles.style.display = "none";
+    cilindros.style.display = "none";
+}
+else if (marca == "Otra"){
+    cartuchos.style.display = "none";
+    toners.style.display = "none";
+    tintas.style.display = "none";
+    unidadDeImagen.style.display = "none";
+    chips.style.display = "none";
+    cintas.style.display = "none";
+    resmas.style.display = "block";
+    polvos.style.display = "none";
+    perifericos.style.display = "block";
+    papeles.style.display = "none";
+    cilindros.style.display = "none";
+}
+}
+
+
+const mostrarProducto = document.getElementById("divProducto");
+let limpiarCampo = document.getElementById("divProducto");
+let rubro = ""
+let valueProducto = ""
+function selecionarRubro(){ 
+    limpiarCampo.innerHTML = ""
+    var detenerBucle = true
+     const selectRubro = document.getElementById("selectRubro1");
+     const opciones = selectRubro.options;
+      rubro = opciones[selectRubro.selectedIndex].value;
+      for (let articulo of articulos) {
+            if ( marca == "Gneiss" && articulo.Rubro =="Tintas"   && articulo.articulo != "BOT GT N" && articulo.articulo != "BOT GT C" && articulo.articulo != "BOT GT M" && articulo.articulo != "BOT GT A") {
+                continue;
+            }
+            else if (articulo.Rubro == rubro && detenerBucle == true) {
+            mostrarProducto.insertAdjacentHTML("beforeend",`<option>${articulo.articulo}</option>`);
+            console.log("rubro", detenerBucle);
+            //  detenerBucle=false;
+            valueProducto= articulo.articulo;
+            }
+        }
+}
+const cantidad1 = 8;
+const cantidad2 = 10;
+const cantidad3 = 15;
+const cantidad4 = 20;
+const cantidad5 = 40;
+const cantidad6 = 18;
+
+
+// funcion calcular!!!!!!!!!!!!!
+                        
+function calcular() {
+                    const select = document.getElementById("selectGeneralMarca");
+                    const opciones = select.options;
+                    let marca = opciones[select.selectedIndex].value;
+                    
+                    // declaro las variables de los rubros 
+
+                    const selectGneiss = document.getElementById("selectGneiss");
+                    const selectBlow = document.getElementById("selectBlow");
+                    const selectArtJet = document.getElementById("selectArtJet");
+                    const selectNext = document.getElementById("selectNext");
+                    const selectOffice = document.getElementById("selectOffice");
+                    const selectOtra = document.getElementById("selectOtra");
+                    let unidadesPorCaja = 0;
+                    function calcularCantidad() {
+                        console.log(mostrarProducto.value)
+                    if (marca == "Gneiss" && rubro == "Toners" && mostrarProducto.value == "05A-80A") {
+                           unidadesPorCaja = cantidad2;
+                           console.log("adentro de calcular cantidad")
+                           
+                        }
+                    }
+                    calcularCantidad()
+                    // if (cajas !=0) {
+                    //     calcularCantidad();
+                    //     return(unidadesPorCaja);
+                    // }
+                    console.log(marca, "primer paso calcular");
+                    if (marca == "Gneiss") {
+                        
+                        
+                                    
+                        
+                        const resultado = document.getElementById("resultado");
+                        
+                            
+                        console.log("segundo paso calcular")
+                        let unidades = Number(document.getElementById("unidades").value);
+                        let cajas = Number(document.getElementById("cajas").value);
+                        if(unidades >= 0 && cajas >= 0) {
+                            resultado.innerHTML = unidades + (cajas * unidadesPorCaja);
+                        }
+                    }  
+
+            
+                }
+            // cuidau-------------------------------------------
+
+
+ //funcion guardar y mostrar estan en libro1(1).js
+      
+
+    </script>
+</body>
+</html>
