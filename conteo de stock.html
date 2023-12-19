@@ -117,9 +117,9 @@
         </main>
         <form id="formulario1">
 
+<!-- Campos input y botones -->
 
-
-            <!-- Campos input y botones -->
+            
             <label>Producto
                 <div  style="color: black;"><select id="divProducto"></select></div><br>
 
@@ -130,7 +130,7 @@
             <label>Cajas</label>
             <input type="number" placeholder="Cajas" id="cajas"><br>
             <input type="button" value="Calcular" onclick="calcular()">
-
+            <input type="button" value=" Borrar  " onclick="borrar()" style="margin-left: 30px; margin-bottom: 15px;" >
             
             <fieldset id="resultado">
                 <legend>Total</legend>
@@ -1451,7 +1451,7 @@
   "Rubro": "Toners"
  },
  {
-  "articulo": "SAM111",
+  "articulo": "SAM111S",
   "Gneiss": 0,
   "Blow Ink": 0,
   "Office": 0,
@@ -10574,17 +10574,22 @@ const cantidad18 = 18;
                         }           
 /*CAJA X 20 Gneiss*/ 
 
-                        else if ((marca == "Gneiss" || marca == "Blow Ink")&& rubro == "Toners" &&( mostrarProducto.value == "H310A-350A N" || mostrarProducto.value =="H311A-351A C" || mostrarProducto.value =="H312A-352A A" || mostrarProducto.value =="H313A-353A M" || mostrarProducto.value =="H17A" || mostrarProducto.value =="H26A" || mostrarProducto.value =="H30A" || mostrarProducto.value =="H78A" || mostrarProducto.value =="H79A" || mostrarProducto.value =="H83A" || mostrarProducto.value =="H85A-35A-36A" )) {
+                        else if (marca == "Gneiss"&& rubro == "Toners" &&( mostrarProducto.value == "H310A-350A N" || mostrarProducto.value =="H311A-351A C" || mostrarProducto.value =="H312A-352A A" || mostrarProducto.value =="H313A-353A M")) {
                                 unidadesPorCaja = cantidad20;
                         }
 
+/*CAJA X 10 Blow*/                     
+                        else if ( marca == "Blow Ink" && rubro == "Toners" &&( mostrarProducto.value == "H26A")) {
+                                unidadesPorCaja = cantidad10;
+                        } 
+
 /*CAJA X 15 Blow*/                     
-                        else if ( marca == "Blow Ink" && rubro == "Toners" &&( mostrarProducto.value == "H05A-80A" || mostrarProducto.value =="12A" || mostrarProducto.value =="H58A S/C" || mostrarProducto.value =="H58A" || mostrarProducto.value =="H105A" || mostrarProducto.value =="105A S/C" || mostrarProducto.value =="SAM101" || mostrarProducto.value =="SAM104" || mostrarProducto.value =="SAM108" || mostrarProducto.value =="SAM111L" || mostrarProducto.value =="SAM111" || mostrarProducto.value =="SAM115" )) {
-                                unidadesPorCaja = cantidad20;
+                        else if ( marca == "Blow Ink" && rubro == "Toners" &&( mostrarProducto.value == "H05A-80A" || mostrarProducto.value =="H12A N" || mostrarProducto.value =="H58A S/C" || mostrarProducto.value =="H58A" || mostrarProducto.value =="H105A" || mostrarProducto.value =="105A S/C" || mostrarProducto.value =="SAM101" || mostrarProducto.value =="SAM104" || mostrarProducto.value =="SAM108" || mostrarProducto.value =="SAM111L" || mostrarProducto.value =="SAM111S" || mostrarProducto.value =="SAM115" )) {
+                                unidadesPorCaja = cantidad15;
                         }  
 /*CAJA X 20 Blow*/ 
 
-                        else if ( marca == "Blow Ink" && rubro == "Toners" &&( mostrarProducto.value == "H310A-350A N" || mostrarProducto.value =="H311A-351A C" || mostrarProducto.value =="H312A-352A A" || mostrarProducto.value =="H313A-353A M" || mostrarProducto.value =="H17A" || mostrarProducto.value =="H26A" || mostrarProducto.value =="H30A" || mostrarProducto.value =="H78A" || mostrarProducto.value =="H79A" || mostrarProducto.value =="H83A" || mostrarProducto.value =="H85A-35A-36A" )) {
+                        else if ( marca == "Blow Ink" && rubro == "Toners" &&(mostrarProducto.value =="H17A" || mostrarProducto.value =="H30A" || mostrarProducto.value =="H48A" || mostrarProducto.value =="H78A" || mostrarProducto.value =="H79A" || mostrarProducto.value =="H83A" || mostrarProducto.value =="H85A-35A-36A" )) {
                                 unidadesPorCaja = cantidad20;
                         }
 
@@ -10606,6 +10611,18 @@ const cantidad18 = 18;
                             resultado.innerHTML = unidades + (cajas * unidadesPorCaja);
                         }
                     } 
+
+function borrar() {
+    resultado.innerHTML = "";
+    document.getElementById("unidades").value = "";
+    document.getElementById("cajas").value = "";
+}
+
+
+
+
+
+
 // Boton guardar!!!!!
 let mostrarJson = document.getElementById("campoParaMostrar");
 let arrayResultado =[];
@@ -10623,7 +10640,7 @@ function guardar() {
     marca,
     producto,
     total,
-  };
+  }
 
   // Agregar el objeto al array
   arrayResultado.push(stock);
@@ -10633,11 +10650,11 @@ function guardar() {
   document.getElementById("cajas").value = "";
 
     console.log(arrayResultado);
-
+    resultado.innerHTML = "";
 
   
   const cadenaJSON = JSON.stringify(arrayResultado);
-    mostrarJson.insertAdjacentHTML("beforeend", `${stock.marca} ${stock.producto} ${stock.total}<br>`)
+    mostrarJson.insertAdjacentHTML("beforeend", `${stock.marca} <b>${stock.producto}</b> ------------ <b>${stock.total}</b><br>`)
   
 }
 
