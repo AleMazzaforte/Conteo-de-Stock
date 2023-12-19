@@ -16,8 +16,9 @@
         }
         main {
             background-color: aqua;
-            height: 50px;
+            height: auto;
             padding-top: 20px;
+            font-size: 1.7rem;
         }
         form {
             padding-top: 15px;
@@ -35,7 +36,7 @@
             margin: 0 auto;
         }
         #selectGeneralMarca {
-            width: 100px;
+            width: 150px;
             height: 30px;
         }
         #contenedor {
@@ -47,15 +48,23 @@
             width: 350px;
             margin: 0 auto;
         }
-        .selectRubro {
-            display: none;
-            padding-top: 15px;
+        #selectRubro1 {
+           font-size: 1rem;
+            
+            width: 150px;
+            height: 30px;
         }
         #divProducto {
             background-color: white;
             width: 280px;
             height: 30px;
             margin: 0 auto;
+        }
+        #select_Rubro {
+            padding-top: 15px;
+        }
+        #unidades, #cajas {
+            margin-bottom: 15px;
         }
     </style>
 </head>
@@ -66,7 +75,7 @@
             <h2>Control de stock</h2>
             
         </header>
-        <main style="font-size: 1.7rem;">
+        <main>
             <label >Marca
                 <select id="selectGeneralMarca"  onchange="select1()">
                     
@@ -82,11 +91,8 @@
                     </ul>
                 </select>
             </label>
-            
-        </main>
-        <form id="formulario1">
-<!-- <select rubro -->
-            <div id="selectGneiss">
+            <!-- <select rubro -->
+            <div id="select_Rubro">
                 <label>Rubro
                     <select id="selectRubro1" onchange="selecionarRubro()">
                             
@@ -108,17 +114,24 @@
                  </label>
                 
             </div>
+        </main>
+        <form id="formulario1">
+
 
 
             <!-- Campos input y botones -->
             <label>Producto
                 <div  style="color: black;"><select id="divProducto"></select></div><br>
+
+
             <label>Unidades</label>
             <input type="number" placeholder="Unidades" id="unidades"><br>
 
             <label>Cajas</label>
             <input type="number" placeholder="Cajas" id="cajas"><br>
             <input type="button" value="Calcular" onclick="calcular()">
+
+            
             <fieldset id="resultado">
                 <legend>Total</legend>
             </fieldset>
@@ -126,7 +139,7 @@
             <input type="button" value="Calculadora" id="botonCalculadora">
         </form>
     </div>
-    <input type="button" value="Mostrar" id="mostrar" onclick = "mostrar()">
+    <input type="button" value="Mostrar" id="mostrar" onclick = "mostrar()" style="display: none;">
     <div id="campoParaMostrar"></div>
     
 
@@ -10594,6 +10607,7 @@ const cantidad18 = 18;
                         }
                     } 
 // Boton guardar!!!!!
+let mostrarJson = document.getElementById("campoParaMostrar");
 let arrayResultado =[];
 let stock =""
 function guardar() {
@@ -10618,8 +10632,15 @@ function guardar() {
   document.getElementById("unidades").value = "";
   document.getElementById("cajas").value = "";
 
-console.log(arrayResultado);
+    console.log(arrayResultado);
+
+
+  
+  const cadenaJSON = JSON.stringify(arrayResultado);
+    mostrarJson.insertAdjacentHTML("beforeend", `${stock.marca} ${stock.producto} ${stock.total}<br>`)
+  
 }
+
 
             
                 
@@ -10627,7 +10648,10 @@ console.log(arrayResultado);
 
 
  //funcion guardar y mostrar estan en libro1(1).js
-      
+
+
+
+
 
     </script>
 </body>
