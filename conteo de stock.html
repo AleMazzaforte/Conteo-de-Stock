@@ -13,6 +13,7 @@
             border-top-right-radius: 25px;
             border-top-left-radius: 25px;
             padding: 1px;
+            display: block;
         }
         main {
             background-color: aqua;
@@ -66,14 +67,24 @@
         #unidades, #cajas {
             margin-bottom: 15px;
         }
+        fieldset {
+            width: 60%;
+            margin: 0 auto;
+            margin-bottom: 5px;
+        }
+        .boton {
+            width: 90px;
+            height: 35px;
+            margin: 10px;
+        }
     </style>
 </head>
 <body>
     <div id="contenedor">
-        <header>
+        <header id="header">
             <h1>Femex/Blow Ink</h1>
             <h2>Control de stock</h2>
-            
+            <input type="button" value="Comenzar" onclick="comenzar()" class="boton">
         </header>
         <main>
             <label >Marca
@@ -97,6 +108,7 @@
                     <select id="selectRubro1" onchange="selecionarRubro()">
                             
                         <ul>
+                            <option id="cartuchos" class="selectRubro" value="">Rubro</option>
                             <option id="cartuchos" class="selectRubro" value="Cartuchos">Cartuchos</option>
                             <option id="toners" class="selectRubro" value="Toners">Toners</option>
                             <option id="tintas" class="selectRubro" value="Tintas">Tintas</option>
@@ -129,14 +141,15 @@
 
             <label>Cajas</label>
             <input type="number" placeholder="Cajas" id="cajas"><br>
-            <input type="button" value="Calcular" onclick="calcular()">
-            <input type="button" value=" Borrar  " onclick="borrar()" style="margin-left: 30px; margin-bottom: 15px;" >
+            <input type="button" value="Calcular" onclick="calcular()" class="boton">
+            <input type="button" value=" Borrar  " onclick="borrar()" class="boton" style="margin-left: 30px; margin-bottom: 15px;" >
             
-            <fieldset id="resultado">
+            <fieldset >
                 <legend>Total</legend>
+                <div id="resultado"></div>
             </fieldset>
-            <input type="button" value="Guardar" id="botonGuardar" onclick="guardar()">
-            <input type="button" value="Calculadora" id="botonCalculadora">
+            <input type="button" value="Guardar" id="botonGuardar" onclick="guardar()" class="boton">
+            <input type="button" value="Calculadora" id="botonCalculadora" class="boton">
         </form>
     </div>
     <input type="button" value="Mostrar" id="mostrar" onclick = "mostrar()" style="display: none;">
@@ -10398,14 +10411,20 @@
 ]
 
 // aca empieza el codigo
+let borrarHeader = document.getElementById("header");
+function comenzar() {
+    borrarHeader.style.display = "none";
+}
+
+
 // Tomo el valor de la marca
 let marca = ""
-//
+let limpiarCampo = document.getElementById("divProducto");
 function select1() {
     const select = document.getElementById("selectGeneralMarca");
     const opciones = select.options;
     marca = opciones[select.selectedIndex].value;
-
+    
     // declaro las variables de las marcas
     const cartuchos = document.getElementById("cartuchos");
     const toners = document.getElementById("toners");
@@ -10503,31 +10522,35 @@ else if (marca == "Otra"){
 
 
 const mostrarProducto = document.getElementById("divProducto");
-let limpiarCampo = document.getElementById("divProducto");
+
 let rubro = ""
 let valueProducto = ""
 
 function selecionarRubro(){ 
         
-   // limpiarCampo.innerHTML = ""
+    limpiarCampo.innerHTML = ""
     var detenerBucle = true
      const selectRubro = document.getElementById("selectRubro1");
      const opciones = selectRubro.options;
       rubro = opciones[selectRubro.selectedIndex].value;
+      
       for (let articulo of articulos) {
-            if ( marca == "Gneiss" && articulo.Rubro =="Tintas"   && articulo.articulo != "BOT GT N" && articulo.articulo != "BOT GT C" && articulo.articulo != "BOT GT M" && articulo.articulo != "BOT GT A") {
+            if ( marca == "Gneiss" && articulo.Rubro =="Tintas"   && articulo.articulo != "BOT GT51 N 90ml" && articulo.articulo != "BOT GT52 C 90ml" && articulo.articulo != "BOT GT52 M 90ml" && articulo.articulo != "BOT GT52 A 90ml") {
                 continue;
+                console.log(rubro)
             }
             else if (articulo.Rubro == rubro && detenerBucle == true) {
             mostrarProducto.insertAdjacentHTML("beforeend",`<option>${articulo.articulo}</option>`);
            
             //  detenerBucle=false;
             valueProducto= articulo.articulo;
+          
             }
         }
 }
 const cantidad8 = 8;
 const cantidad10 = 10;
+const cantidad12 = 12;
 const cantidad15 = 15;
 const cantidad20 = 20;
 const cantidad40 = 40;
@@ -10535,12 +10558,16 @@ const cantidad18 = 18;
 
 
 // funcion calcular!!!!!!!!!!!!!
-                        
+                    const resultado = document.getElementById("resultado");   
+                         
                     function calcular() {
-
+                     
+                          
+ 
                         const select = document.getElementById("selectGeneralMarca");
                         const opciones = select.options;
                         let marca = opciones[select.selectedIndex].value;
+                        
                         
                         // declaro las variables de los rubros 
 
@@ -10554,6 +10581,8 @@ const cantidad18 = 18;
 
 
                         function calcularCantidad() {
+                     
+                     
                         
  /*CAJA X 8 Gneiss*/ 
                         if (marca == "Gneiss" && rubro == "Toners" &&( mostrarProducto.value == "H51A " || mostrarProducto.value =="H55A" || mostrarProducto.value =="H64A-90A" || mostrarProducto.value =="SAM203L" || mostrarProducto.value =="SAM205L" || mostrarProducto.value =="SAM209L")) {
@@ -10583,6 +10612,11 @@ const cantidad18 = 18;
                                 unidadesPorCaja = cantidad10;
                         } 
 
+/*CAJA X 12 Blow*/                     
+                        else if ( marca == "Blow Ink" && rubro == "Polvos") {
+                                unidadesPorCaja = cantidad12;
+                        } 
+
 /*CAJA X 15 Blow*/                     
                         else if ( marca == "Blow Ink" && rubro == "Toners" &&( mostrarProducto.value == "H05A-80A" || mostrarProducto.value =="H12A N" || mostrarProducto.value =="H58A S/C" || mostrarProducto.value =="H58A" || mostrarProducto.value =="H105A" || mostrarProducto.value =="105A S/C" || mostrarProducto.value =="SAM101" || mostrarProducto.value =="SAM104" || mostrarProducto.value =="SAM108" || mostrarProducto.value =="SAM111L" || mostrarProducto.value =="SAM111S" || mostrarProducto.value =="SAM115" )) {
                                 unidadesPorCaja = cantidad15;
@@ -10600,19 +10634,24 @@ const cantidad18 = 18;
 
         
                     }
-                        calcularCantidad()
-                     
-                        const resultado = document.getElementById("resultado");
-                              
+                          
                         
                         let unidades = Number(document.getElementById("unidades").value);
                         let cajas = Number(document.getElementById("cajas").value);
+                         
                         if(unidades >= 0 && cajas >= 0) {
+      
+                        calcularCantidad()
+                           
+                                    
                             resultado.innerHTML = unidades + (cajas * unidadesPorCaja);
+                           
+                         
                         }
                     } 
 
 function borrar() {
+
     resultado.innerHTML = "";
     document.getElementById("unidades").value = "";
     document.getElementById("cajas").value = "";
@@ -10627,13 +10666,26 @@ function borrar() {
 let mostrarJson = document.getElementById("campoParaMostrar");
 let arrayResultado =[];
 let stock =""
+   
+let marca1 =""
+let producto =""
+let total =""
 function guardar() {
-  
+   marca1 = document.getElementById("selectGeneralMarca").value;
+   producto = document.getElementById("divProducto").value;
+   total = Number(resultado.innerHTML);
+
+ //control de producto seleccionado
+    
+   
+     if (marca1== stock.marca && producto==  stock.producto) {
+                            
+       alert("El producto ya fue contabilizado");
+            return;
+    }
 
   // Obtener los datos de la tabla
-  const marca = document.getElementById("selectGeneralMarca").value;
-  const producto = document.getElementById("divProducto").value;
-   const total = Number(resultado.innerHTML);
+   
 
   // Crear el objeto
   stock =  {
@@ -10641,20 +10693,23 @@ function guardar() {
     producto,
     total,
   }
+ 
 
+
+
+
+                         
   // Agregar el objeto al array
   arrayResultado.push(stock);
-
-// Limpiar los campos de entrada
-  document.getElementById("unidades").value = "";
-  document.getElementById("cajas").value = "";
-
-    console.log(arrayResultado);
-    resultado.innerHTML = "";
-
   
-  const cadenaJSON = JSON.stringify(arrayResultado);
-    mostrarJson.insertAdjacentHTML("beforeend", `${stock.marca} <b>${stock.producto}</b> ------------ <b>${stock.total}</b><br>`)
+// Limpiar los campos de entrada
+document.getElementById("unidades").value = "";
+document.getElementById("cajas").value = "";
+resultado.innerHTML = "";
+        
+  //Mostrar en el dom
+const cadenaJSON= JSON.stringify(arrayResultado);
+mostrarJson.insertAdjacentHTML("beforeend", `${stock.marca} <b>${stock.producto}</b> ------------ <b>${stock.total}</b><br>`)
   
 }
 
