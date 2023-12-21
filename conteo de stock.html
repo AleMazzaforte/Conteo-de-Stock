@@ -48,6 +48,7 @@
             text-align: left;
             width: 350px;
             margin: 0 auto;
+            margin-top: 15px;
         }
         #selectRubro1 {
            font-size: 1rem;
@@ -150,6 +151,7 @@
             </fieldset>
             <input type="button" value="Guardar" id="botonGuardar" onclick="guardar()" class="boton">
             <input type="button" value="Calculadora" id="botonCalculadora" class="boton">
+            <input type="button" value="Borrar Error" id="borrarUltimoDato" onclick="borrarError()" class="boton">
         </form>
     </div>
     <input type="button" value="Mostrar" id="mostrar" onclick = "mostrar()" style="display: none;">
@@ -10665,8 +10667,7 @@ function borrar() {
 // Boton guardar!!!!!
 let mostrarJson = document.getElementById("campoParaMostrar");
 let arrayResultado =[];
-let stock =""
-   
+let stock =""   
 let marca1 =""
 let producto =""
 let total =""
@@ -10683,34 +10684,39 @@ function guardar() {
        alert("El producto ya fue contabilizado");
             return;
     }
-
-  // Obtener los datos de la tabla
-   
-
-  // Crear el objeto
+ // Crear el objeto
   stock =  {
     marca,
     producto,
     total,
   }
- 
-
-
-
-
-                         
+                     
   // Agregar el objeto al array
-  arrayResultado.push(stock);
+    arrayResultado.push(stock);
   
 // Limpiar los campos de entrada
-document.getElementById("unidades").value = "";
-document.getElementById("cajas").value = "";
-resultado.innerHTML = "";
+    document.getElementById("unidades").value = "";
+    document.getElementById("cajas").value = "";
+    resultado.innerHTML = "";
         
   //Mostrar en el dom
-const cadenaJSON= JSON.stringify(arrayResultado);
-mostrarJson.insertAdjacentHTML("beforeend", `${stock.marca} <b>${stock.producto}</b> ------------ <b>${stock.total}</b><br>`)
-  
+    const cadenaJSON= JSON.stringify(arrayResultado);
+    mostrarJson.insertAdjacentHTML("beforeend", `${stock.marca} <b>${stock.producto}</b> ------------ <b>${stock.total}</b><br>`);
+}
+//Borrar error
+let cadenaJASON = document.getElementById("campoParaMostrar");
+let otraVariableParaEscribir = document.getElementById("campoParaMostrar");
+function borrarError() {
+    cadenaJASON.innerHTML="";
+    arrayResultado.pop();
+    stock.producto="";
+      
+     for (const i of arrayResultado) {
+        otraVariableParaEscribir.insertAdjacentHTML("beforeend", `${i.marca}-<b>${i.producto}</b>----------<b>${i.total}</b><br>`);
+     }
+    
+   
+   
 }
 
 
@@ -10719,7 +10725,7 @@ mostrarJson.insertAdjacentHTML("beforeend", `${stock.marca} <b>${stock.producto}
            
 
 
- //funcion guardar y mostrar estan en libro1(1).js
+ 
 
 
 
