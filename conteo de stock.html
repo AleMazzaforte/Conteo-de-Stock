@@ -84,6 +84,9 @@
         legend {
             text-align: left;
         }
+        .guardar2 {
+            display: none;
+        } 
     </style>
 </head>
 <body>
@@ -148,19 +151,22 @@
 
             <label>Cajas</label>
             <input type="number" placeholder="Cajas" id="cajas"><br>
-            <input type="button" value="Calcular" onclick="calcular()" class="boton">
+            <input type="button" value="Calcular" onclick="calcular()" class="boton guardar1">
+            <input type="button" value="Calcular" id="m" onclick = "calcular2()" class="boton guardar2">
             <input type="button" value=" Borrar  " onclick="borrar()" class="boton" style="margin-left: 30px; margin-bottom: 15px;" >
             
             <fieldset >
                 <legend>Total</legend>
                 <div id="resultado"></div>
             </fieldset>
-            <input type="button" value="Guardar" id="botonGuardar" onclick="guardar()" class="boton">
+            <input type="button" value="Guardar" id="botonGuardar" onclick="guardar()" class="boton guardar1">
+            <input type="button" value="Guardar" id="mostrar" onclick = "guardar2()" class="boton guardar2">
             <input type="button" value="Calculadora" id="botonCalculadora" class="boton">
             <input type="button" value="Borrar Error" id="borrarUltimoDato" onclick="borrarError()" class="boton">
+
         </form>
     </div>
-    <input type="button" value="Mostrar" id="mostrar" onclick = "mostrar()" style="display: none;">
+    
     <div id="campoParaMostrar"></div>
     
 
@@ -10425,7 +10431,7 @@ const cantidad15 = 15;
 const cantidad20 = 20;
 const cantidad40 = 40;
 const cantidad18 = 18;
-
+var diferencia = false
 
 // funcion calcular!!!!!!!!!!!!!
                     const resultado = document.getElementById("resultado");   
@@ -10515,7 +10521,7 @@ const cantidad18 = 18;
                         
                         let unidades = Number(document.getElementById("unidades").value);
                         let cajas = Number(document.getElementById("cajas").value);
-                         
+                     
                         if(unidades >= 0 && cajas >= 0) {
                             
                         calcularCantidad()
@@ -10523,21 +10529,25 @@ const cantidad18 = 18;
                             for (let unidad of articulos) {
                                 
                                 let compararResultado = unidades + (cajas * unidadesPorCaja);
-                                /*
-                                    console.log(marca, "antes del if")
-                                    console.log(rubro, "antes del if")
-                                console.log(mostrarProducto.value, "mostrarProducto.value antes del if")
-                                
-                                console.log(unidad.articulo, "unidad.articulos antes del if")
-                                */
+                                let controlPrompt;
                                 if (marca == "Blow_Ink" && rubro== unidad.Rubro && mostrarProducto.value== unidad.articulo ) {
                                    
                                    if(unidad.CantidadBlowInkSistema == compararResultado) {
-                                     resultado.innerHTML = compararResultado;
+                                         resultado.innerHTML = compararResultado;
                                     }
                                     else {
-                                    alert(`El valor no coincide. El sistema informa ${unidad.CantidadBlowInkSistema} unidades de ${mostrarProducto.value}`);
-                                    return
+                                        controlPrompt = prompt(`El valor no coincide. El sistema informa ${unidad.CantidadBlowInkSistema} unidades de ${mostrarProducto.value}. Ingrese 1 para volver a contar, 2 para guardar el valor.`);
+                                        if (controlPrompt == 1){
+                                            resultado.innerHTML = "";
+                                            document.getElementById("unidades").value = "";
+                                            document.getElementById("cajas").value = "";
+                                            
+                                             return;
+                                        }else {
+                                            diferencia = true;
+                                            resultado.innerHTML = compararResultado;
+                                        }
+                                       
                                     }
                                 
                                 }
@@ -10545,11 +10555,19 @@ const cantidad18 = 18;
                                 if (marca == "Gneiss" && rubro== unidad.Rubro && mostrarProducto.value== unidad.articulo ) {
                                    
                                    if(unidad.CantidadGneissSistema == compararResultado) {
-                                     resultado.innerHTML = compararResultado;
+                                         resultado.innerHTML = compararResultado;
                                     }
                                     else {
-                                    alert(`El valor no coincide. El sistema informa ${unidad.CantidadGneissSistema} unidades de ${mostrarProducto.value}`);
-                                    return
+                                        controlPrompt = prompt(`El valor no coincide. El sistema informa ${unidad.CantidadGneissSistema} unidades de ${mostrarProducto.value}. Ingrese 1 para volver a contar, 2 para guardar el valor.`);
+                                        if (controlPrompt == 1){
+                                            resultado.innerHTML = "";
+                                            document.getElementById("unidades").value = "";
+                                            document.getElementById("cajas").value = "";
+                                             return;
+                                        }else {
+                                            diferencia = true;
+                                            resultado.innerHTML = compararResultado;
+                                        }
                                     }
                                 
                                 
@@ -10557,11 +10575,19 @@ const cantidad18 = 18;
                                 if (marca == "Next_One" && rubro== unidad.Rubro && mostrarProducto.value== unidad.articulo ) {
                                     
                                    if(unidad.CantidadNextOneSistema == compararResultado) {
-                                     resultado.innerHTML = compararResultado;
+                                        resultado.innerHTML = compararResultado;
                                     }
                                     else {
-                                    alert(`El valor no coincide. El sistema informa ${unidad.CantidadNext_OneSistema} unidades de ${mostrarProducto.value}`);
-                                    return
+                                        controlPrompt = prompt(`El valor no coincide. El sistema informa ${unidad.CantidadNext_OneSistema} unidades de ${mostrarProducto.value}. Ingrese 1 para volver a contar, 2 para guardar el valor.`);
+                                        if (controlPrompt == 1){
+                                            resultado.innerHTML = "";
+                                            document.getElementById("unidades").value = "";
+                                            document.getElementById("cajas").value = "";
+                                             return;
+                                        }else {
+                                            diferencia = true;
+                                            resultado.innerHTML = compararResultado;
+                                        }
                                     }
                                 
                                 
@@ -10569,11 +10595,19 @@ const cantidad18 = 18;
                                 if (marca == "Art_Jet" && rubro== unidad.Rubro && mostrarProducto.value== unidad.articulo ) {
                                     
                                    if(unidad.CantidadArtJetSistema == compararResultado) {
-                                     resultado.innerHTML = compararResultado;
+                                        resultado.innerHTML = compararResultado;
                                     }
                                     else {
-                                    alert(`El valor no coincide. El sistema informa ${unidad.CantidadArt_jetSistema} unidades de ${mostrarProducto.value}`);
-                                    return
+                                        controlPrompt = prompt(`El valor no coincide. El sistema informa ${unidad.CantidadArt_jetSistema} unidades de ${mostrarProducto.value}. Ingrese 1 para volver a contar, 2 para guardar el valor.`);
+                                        if (controlPrompt == 1){
+                                            resultado.innerHTML = "";
+                                            document.getElementById("unidades").value = "";
+                                            document.getElementById("cajas").value = "";
+                                             return;
+                                        }else {
+                                            diferencia = true;
+                                            resultado.innerHTML = compararResultado;
+                                        }
                                     }
                                 
                                 
@@ -10581,11 +10615,19 @@ const cantidad18 = 18;
                                 if (marca == "Global" && rubro== unidad.Rubro && mostrarProducto.value== unidad.articulo ) {
                                     
                                    if(unidad.CantidadGlobalSistema == compararResultado) {
-                                     resultado.innerHTML = compararResultado;
+                                        resultado.innerHTML = compararResultado;
                                     }
                                     else {
-                                    alert(`El valor no coincide. El sistema informa ${unidad.CantidadGlobalSistema} unidades de ${mostrarProducto.value}`);
-                                    return
+                                        controlPrompt = prompt(`El valor no coincide. El sistema informa ${unidad.CantidadGlobalSistema} unidades de ${mostrarProducto.value}. Ingrese 1 para volver a contar, 2 para guardar el valor.`);
+                                        if (controlPrompt == 1){
+                                            resultado.innerHTML = "";
+                                            document.getElementById("unidades").value = "";
+                                            document.getElementById("cajas").value = "";
+                                             return;
+                                        }else {
+                                            diferencia = true;
+                                            resultado.innerHTML = compararResultado;
+                                        }
                                     }
                                 
                                 
@@ -10593,11 +10635,19 @@ const cantidad18 = 18;
                                 if (marca == "Office" && rubro== unidad.Rubro && mostrarProducto.value== unidad.articulo ) {
                                     
                                    if(unidad.CantidadOfficeSistema == compararResultado) {
-                                     resultado.innerHTML = compararResultado;
+                                        resultado.innerHTML = compararResultado;
                                     }
                                     else {
-                                    alert(`El valor no coincide. El sistema informa ${unidad.CantidadofficeSistema} unidades de ${mostrarProducto.value}`);
-                                    return
+                                        controlPrompt = prompt(`El valor no coincide. El sistema informa ${unidad.CantidadofficeSistema} unidades de ${mostrarProducto.value}. Ingrese 1 para volver a contar, 2 para guardar el valor.`);
+                                        if (controlPrompt == 1){
+                                            resultado.innerHTML = "";
+                                            document.getElementById("unidades").value = "";
+                                            document.getElementById("cajas").value = "";
+                                             return;
+                                        }else {
+                                            diferencia = true;
+                                            resultado.innerHTML = compararResultado;
+                                        }
                                     }
                                 
                                 
@@ -10605,11 +10655,19 @@ const cantidad18 = 18;
                                 if (marca == "Otra" && rubro== unidad.Rubro && mostrarProducto.value== unidad.articulo ) {
                                     
                                    if(unidad.CantidadOtraSistema == compararResultado) {
-                                     resultado.innerHTML = compararResultado;
+                                        resultado.innerHTML = compararResultado;
                                     }
                                     else {
-                                    alert(`El valor no coincide. El sistema informa ${unidad.CantidadOtraSistema} unidades de ${mostrarProducto.value}`);
-                                    return
+                                        controlPrompt = prompt(`El valor no coincide. El sistema informa ${unidad.CantidadOtraSistema} unidades de ${mostrarProducto.value}. Ingrese 1 para volver a contar, 2 para guardar el valor.`);
+                                        if (controlPrompt == 1){
+                                            resultado.innerHTML = "";
+                                            document.getElementById("unidades").value = "";
+                                            document.getElementById("cajas").value = "";
+                                             return;
+                                        }else {
+                                            diferencia = true;
+                                            resultado.innerHTML = compararResultado;
+                                        }
                                     }
                                 
                                 
@@ -10670,9 +10728,17 @@ function guardar() {
         
   //Mostrar en el dom
     const cadenaJSON= JSON.stringify(arrayResultado);
-    mostrarJson.insertAdjacentHTML("beforeend", `${stock.marca} <b>${stock.producto}</b> ------------ <b>${stock.total}</b><br>`);
-}
-//Borrar error
+    if (diferencia == false) {
+        mostrarJson.insertAdjacentHTML("beforeend", `${stock.marca} <b>${stock.producto}</b> ------------ <b>${stock.total}</b><br>`);
+    }
+    else {
+        mostrarJson.insertAdjacentHTML("beforeend", `${stock.marca} <b>${stock.producto}</b> ------------ <b>${stock.total}</b> Diferencia<br>`);
+
+    }
+    diferencia = false
+}   
+
+//**********************************************Borrar error
 let cadenaJASON = document.getElementById("campoParaMostrar");
 let otraVariableParaEscribir = document.getElementById("campoParaMostrar");
 function borrarError() {
@@ -10683,10 +10749,128 @@ function borrarError() {
      for (const i of arrayResultado) {
         otraVariableParaEscribir.insertAdjacentHTML("beforeend", `${i.marca}-<b>${i.producto}</b>----------<b>${i.total}</b><br>`);
      }
-    
+}    
    
-   
+   // ******************************** Funciones Calcular2 y guardar2******************************
+
+   // funcion calcular!!!!!!!!!!!!!
+      
+                         
+                         function calcular2() {
+                    
+                               
+      
+                             const select = document.getElementById("selectGeneralMarca");
+                             const opciones = select.options;
+                             let marca = opciones[select.selectedIndex].value;
+                             
+                             
+                             // declaro las variables de los rubros 
+     
+                             const selectGneiss = document.getElementById("selectGneiss");
+                             const selectBlow = document.getElementById("selectBlow");
+                             const selectArtJet = document.getElementById("selectArtJet");
+                             const selectNext = document.getElementById("selectNext");
+                             const selectOffice = document.getElementById("selectOffice");
+                             const selectOtra = document.getElementById("selectOtra");
+                             let unidadesPorCaja = 0;
+     
+     
+                             function calcularCantidad() {
+                          
+                          
+                             
+      /*CAJA X 8 Gneiss*/ 
+                             if (marca == "Gneiss" && rubro == "Toners" &&( mostrarProducto.value == "H51A " || mostrarProducto.value =="H55A" || mostrarProducto.value =="H64A-90A" || mostrarProducto.value =="SAM203L" || mostrarProducto.value =="SAM205L" || mostrarProducto.value =="SAM209L")) {
+                                     unidadesPorCaja = cantidad8;
+                             }
+     /*CAJA X 10 Gneiss*/           
+                          
+                             else if (marca == "Gneiss" && rubro == "Toners" &&( mostrarProducto.value == "H05A-80A" || mostrarProducto.value =="H49A-53A" || mostrarProducto.value =="H87A" ||mostrarProducto.value =="H89A S/C" || mostrarProducto.value =="H89A" ||mostrarProducto.value =="SAM108" ||mostrarProducto.value =="SAM115" ||mostrarProducto.value =="BRO580-650" ||mostrarProducto.value =="XER3140-3155-3160" ||mostrarProducto.value =="LEX310 MS")) {
+                                     unidadesPorCaja = cantidad10;
+                                 }    
+      /*CAJA X 15 Gneiss*/               
+                             else if (marca == "Gneiss" && rubro == "Toners" &&( mostrarProducto.value == "H12A " || mostrarProducto.value =="H17A" || mostrarProducto.value =="H87A" || mostrarProducto.value =="H30A" || mostrarProducto.value =="H48A" || mostrarProducto.value =="H78A" || mostrarProducto.value =="H79A" || mostrarProducto.value =="H83A" || mostrarProducto.value =="H85A" || mostrarProducto.value =="H105A S/C" || mostrarProducto.value =="H105A" ||mostrarProducto.value =="SAM111L" ||mostrarProducto.value =="SAM116" ||mostrarProducto.value =="BRO410-450" ||mostrarProducto.value =="XER3020-3025" )) {
+                                     unidadesPorCaja = cantidad15;
+                             }                                
+     /*CAJA X 18 Gneiss*/      
+                             else if (marca == "Gneiss" && rubro == "Toners" && mostrarProducto.value == "BRO660-2370" ) {
+                                     unidadesPorCaja = cantidad18;
+                             }           
+     /*CAJA X 20 Gneiss*/ 
+     
+                             else if (marca == "Gneiss"&& rubro == "Toners" &&( mostrarProducto.value == "H310A-350A N" || mostrarProducto.value =="H311A-351A C" || mostrarProducto.value =="H312A-352A A" || mostrarProducto.value =="H313A-353A M")) {
+                                     unidadesPorCaja = cantidad20;
+                             }
+     
+     /*CAJA X 10 Blow*/                     
+                             else if ( marca == "Blow_Ink" && rubro == "Toners" &&( mostrarProducto.value == "H26A")) {
+                                     unidadesPorCaja = cantidad10;
+                             } 
+     
+     /*CAJA X 12 Blow*/                     
+                             else if ( marca == "Blow_Ink" && rubro == "Polvos") {
+                                     unidadesPorCaja = cantidad12;
+                             } 
+     
+     /*CAJA X 15 Blow*/                     
+                             else if ( marca == "Blow_Ink" && rubro == "Toners" &&( mostrarProducto.value == "H05A-80A" || mostrarProducto.value =="H12A N" || mostrarProducto.value =="H58A S/C" || mostrarProducto.value =="H58A" || mostrarProducto.value =="H105A" || mostrarProducto.value =="105A S/C" || mostrarProducto.value =="SAM101" || mostrarProducto.value =="SAM104" || mostrarProducto.value =="SAM108" || mostrarProducto.value =="SAM111L" || mostrarProducto.value =="SAM111S" || mostrarProducto.value =="SAM115" )) {
+                                     unidadesPorCaja = cantidad15;
+                             }  
+     /*CAJA X 20 Blow*/ 
+     
+                             else if ( marca == "Blow_Ink" && rubro == "Toners" &&(mostrarProducto.value =="H17A" || mostrarProducto.value =="H30A" || mostrarProducto.value =="H48A" || mostrarProducto.value =="H78A" || mostrarProducto.value =="H79A" || mostrarProducto.value =="H83A" || mostrarProducto.value =="H85A-35A-36A" )) {
+                                     unidadesPorCaja = cantidad20;
+                             }
+     
+       /*CAJA X 40  */      
+                             else if (marca == "Blow_Ink" && rubro == "Toners" && mostrarProducto.value =="BRO1060") {
+                                     unidadesPorCaja = cantidad40;
+                             } 
+                         }
+                            let unidades = Number(document.getElementById("unidades").value);
+                            let cajas = Number(document.getElementById("cajas").value);
+                              
+                            if(unidades >= 0 && cajas >= 0) {
+                                 
+                                 calcularCantidad()
+                                resultado.innerHTML = unidades + (cajas * unidadesPorCaja);
+                                 }        
+                        }        
+          //************************** Función Guardar2************************************                     
+          function guardar2() {
+   marca1 = document.getElementById("selectGeneralMarca").value;
+   producto = document.getElementById("divProducto").value;
+   total = Number(resultado.innerHTML);
+
+ // Crear el objeto
+ let stock =  {
+    marca,
+    producto,
+    total,
+  }
+ // Agregar el objeto al array
+    arrayResultado.push(stock);
+  alert(arrayResultado)
+// Limpiar los campos de entrada
+    document.getElementById("unidades").value = "";
+    document.getElementById("cajas").value = "";
+    resultado.innerHTML = "";
+        
+  //Mostrar en el dom
+    const cadenaJSON= JSON.stringify(arrayResultado);
+    mostrarJson.insertAdjacentHTML("beforeend", `${stock.marca} <b>${stock.producto}</b> ------------ <b>${stock.total}</b><br>`);
 }
+               
+                                  
+                                 
+                                         
+                                 
+                                
+                              
+                             
+                         
+
 
 
             
