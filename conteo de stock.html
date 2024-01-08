@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Control de stock</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+
     <style>
         body {
             text-align: center;
@@ -10413,7 +10415,7 @@ function selecionarRubro(){
       for (let articulo of articulos) {
             if ( marca == "Gneiss" && articulo.Rubro =="Tintas"   && articulo.articulo != "BOT GT51 N 90ml" && articulo.articulo != "BOT GT52 C 90ml" && articulo.articulo != "BOT GT52 M 90ml" && articulo.articulo != "BOT GT52 A 90ml") {
                 continue;
-                console.log(rubro)
+                
             }
             else if (articulo.Rubro == rubro && detenerBucle == true) {
             mostrarProducto.insertAdjacentHTML("beforeend",`<option>${articulo.articulo}</option>`);
@@ -10473,11 +10475,12 @@ var diferencia = false
                         }
 /*CAJA X 10 Gneiss*/           
                      
-                        else if (marca == "Gneiss" && rubro == "Toners" &&( mostrarProducto.value == "H05A-80A" || mostrarProducto.value =="H49A-53A" || mostrarProducto.value =="H87A" ||mostrarProducto.value =="H89A S/C" || mostrarProducto.value =="H89A" ||mostrarProducto.value =="SAM108" ||mostrarProducto.value =="SAM115" ||mostrarProducto.value =="BRO580-650" ||mostrarProducto.value =="XER3140-3155-3160" ||mostrarProducto.value =="LEX310 MS")) {
+                        else if (marca == "Gneiss" && (rubro == "Toners" || rubro == "Unidad de Imagen") &&( mostrarProducto.value == "H05A-80A" || mostrarProducto.value =="H49A-53A" || mostrarProducto.value =="H87A" ||mostrarProducto.value =="H89A S/C" || mostrarProducto.value =="H89A" ||mostrarProducto.value =="SAM108" ||mostrarProducto.value =="SAM115" ||mostrarProducto.value =="BRO580-650" ||mostrarProducto.value =="XER3140-3155-3160" ||mostrarProducto.value =="LEX310 MS" || mostrarProducto.value == "DR14A" || mostrarProducto.value == "DR880-3460")) {
                                 unidadesPorCaja = cantidad10;
+                                console.log(mostrarProducto, "mostrarProducto")
                             }    
  /*CAJA X 15 Gneiss*/               
-                        else if (marca == "Gneiss" && rubro == "Toners" &&( mostrarProducto.value == "H12A " || mostrarProducto.value =="H17A" || mostrarProducto.value =="H87A" || mostrarProducto.value =="H30A" || mostrarProducto.value =="H48A" || mostrarProducto.value =="H78A" || mostrarProducto.value =="H79A" || mostrarProducto.value =="H83A" || mostrarProducto.value =="H85A" || mostrarProducto.value =="H105A S/C" || mostrarProducto.value =="H105A" ||mostrarProducto.value =="SAM111L" ||mostrarProducto.value =="SAM116" ||mostrarProducto.value =="BRO410-450" ||mostrarProducto.value =="XER3020-3025" )) {
+                        else if (marca == "Gneiss" && (rubro == "Toners"|| rubro == "Unidad de Imagen" )&&( mostrarProducto.value == "H12A " || mostrarProducto.value =="H17A" || mostrarProducto.value =="H87A" || mostrarProducto.value =="H30A" || mostrarProducto.value =="H48A" || mostrarProducto.value =="H78A" || mostrarProducto.value =="H79A" || mostrarProducto.value =="H83A" || mostrarProducto.value =="H85A" || mostrarProducto.value =="H105A S/C" || mostrarProducto.value =="H105A" ||mostrarProducto.value =="SAM111L" ||mostrarProducto.value =="SAM116" ||mostrarProducto.value =="SAM104" ||mostrarProducto.value =="BRO410-450" ||mostrarProducto.value =="XER3020-3025" || mostrarProducto.value == "DR1060" )) {
                                 unidadesPorCaja = cantidad15;
                         }                                
 /*CAJA X 18 Gneiss*/      
